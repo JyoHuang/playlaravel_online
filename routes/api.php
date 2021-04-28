@@ -18,15 +18,15 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::group(['prefix' => 'message'], function () {
-    Route::get('/gettextmessage', 'App\Http\Controllers\message\TextMessageController@getTextMessage');
-    Route::post('/addtextmessage','App\Http\Controllers\message\TextMessageController@addTextMessage'); 
-    Route::put('/updatetextmessage','App\Http\Controllers\message\TextMessageController@updateTextMessage'); 
-    Route::delete('/deletetextmessage','App\Http\Controllers\message\TextMessageController@deleteTextMessage');
-    Route::post('/searchtextmessage','App\Http\Controllers\message\TextMessageController@searchTextMessage'); 
+    Route::get('/gettextmessage', 'message\TextMessageController@getTextMessage');
+    Route::post('/addtextmessage','message\TextMessageController@addTextMessage'); 
+    Route::put('/updatetextmessage','message\TextMessageController@updateTextMessage'); 
+    Route::delete('/deletetextmessage','message\TextMessageController@deleteTextMessage');
+    Route::post('/searchtextmessage','message\TextMessageController@searchTextMessage'); 
 
-    Route::get('/getimagemessage', 'App\Http\Controllers\message\ImageMessageController@getImageMessage');
-    Route::post('/addimagemessage','App\Http\Controllers\message\ImageMessageController@addImageMessage'); 
-    Route::post('/updateimagemessage','App\Http\Controllers\message\ImageMessageController@updateImageMessage'); 
-    Route::delete('/deleteimagemessage','App\Http\Controllers\message\ImageMessageController@deleteImageMessage');
-    Route::post('/searchimagemessage','App\Http\Controllers\message\ImageMessageController@searchImageMessage');
+    Route::get('/getimagemessage', 'message\ImageMessageController@getImageMessage');
+    Route::post('/addimagemessage','message\ImageMessageController@addImageMessage'); 
+    Route::post('/updateimagemessage','message\ImageMessageController@updateImageMessage'); 
+    Route::delete('/deleteimagemessage','message\ImageMessageController@deleteImageMessage');
+    Route::post('/searchimagemessage','message\ImageMessageController@searchImageMessage');
 });
