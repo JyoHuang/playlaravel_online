@@ -29,4 +29,9 @@ Route::group(['prefix' => 'message'], function () {
     Route::post('/updateimagemessage','message\ImageMessageController@updateImageMessage'); 
     Route::delete('/deleteimagemessage','message\ImageMessageController@deleteImageMessage');
     Route::post('/searchimagemessage','message\ImageMessageController@searchImageMessage');
+
+    Route::get('/linkstoragepath','message\ImageMessageController@linkStoragePath');
+    Route::get('/linkstorage', function () {
+        Artisan::call('storage:link');
+    });
 });

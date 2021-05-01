@@ -9,20 +9,32 @@ use DB;
 use Illuminate\Http\Request;
 use Log;
 use Storage;
+use Illuminate\Support\Facades\File;
 
 class ImageMessageController extends Controller
 {
 
+    public function linkStoragePath()
+    {
+        
+        File::link(
+            storage_path('app/public'),
+            public_path('storage')
+        );
+        
+        $response = [
+            'success' => true
+        ];
+        return response()->json($response);
+
+    }
     public function getImageMessage()
     {
-        $testUrl = Storage::url('test.png');
-
         $messages = DB::table('message_image')->get();
 
         $response = [
             'success' => true,
             'messages' => $messages,
-            'testUrl' => $testUrl
         ];
         return response()->json($response);
     }
