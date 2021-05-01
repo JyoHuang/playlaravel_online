@@ -15,11 +15,14 @@ class ImageMessageController extends Controller
 
     public function getImageMessage()
     {
+        $testUrl = Storage::url('test.png');
+
         $messages = DB::table('message_image')->get();
 
         $response = [
             'success' => true,
             'messages' => $messages,
+            'testUrl' => $testUrl
         ];
         return response()->json($response);
     }
