@@ -16,17 +16,16 @@ class ImageMessageController extends Controller
 
     public function linkStoragePath()
     {
-        
+
         File::link(
             storage_path('app/public'),
             public_path('storage')
         );
-        
+
         $response = [
             'success' => true
         ];
         return response()->json($response);
-
     }
     public function getImageMessage()
     {
@@ -73,17 +72,9 @@ class ImageMessageController extends Controller
             return $response;
         }
 
-        
-        //4.儲存
-        $path = request()->file('file-to-upload')->store('public/files');
-        $fileName = basename($path);
 
-        $domain_name = request()->root();
-        $imageUrl = $domain_name . '/storage/files/' . $fileName;
-
-        //存成字串
-        $image = base64_encode(file_get_contents(request()->file('file-to-upload')));
-        $imageUrl = $image;
+        //4.把圖存成base64字串就好囉
+        $imageUrl = base64_encode(file_get_contents(request()->file('file-to-upload')));
 
         //5.把路徑存到資料表中
         //新增至資料庫
@@ -152,30 +143,8 @@ class ImageMessageController extends Controller
             return $response;
         }
 
-        //4.儲存
-        $path = request()->file('file-to-upload')->store('public/files');
-        $fileName = basename($path);
-
-        $domain_name = request()->root();
-        $imageUrl = $domain_name . '/storage/files/' . $fileName;
-
-
-        //4刪除原本的圖片
-        //先刪除原本的圖片
-        $result = DB::table('message_image')
-            ->where('id', $payload['id'])
-            ->first();
-        if (empty($result)) {
-            $response = [
-                'success' => false,
-                'message' => '不存在',
-            ];
-            return $response;
-        }
-        $image_local_to_delete = $result->image_local;
-        $indexOfFilePath = strpos($image_local_to_delete, 'files');
-        $filePath = substr($image_local_to_delete, $indexOfFilePath);
-        $deleteResult = Storage::delete("public/" . $filePath);
+        //4.把圖存成base64字串就好囉
+        $imageUrl = base64_encode(file_get_contents(request()->file('file-to-upload')));
 
         //5.把路徑存到資料表中
         //更新至資料庫
