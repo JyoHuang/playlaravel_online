@@ -30,4 +30,5 @@ Route::group(['prefix' => 'message'], function () {
     Route::delete('/deleteimagemessage','message\ImageMessageController@deleteImageMessage');
     Route::post('/searchimagemessage','message\ImageMessageController@searchImageMessage');
 
+    Route::post('/addimagebase64message','message\ImageMessageController@addImageBase64Message'); 
 });

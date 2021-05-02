@@ -91,6 +91,20 @@ class ImageMessageController extends Controller
 
         return $response;
     }
+    public function addImageBase64Message(){
+        $payload = request()->all();
+        $mImageMessageModel = new ImageMessageModel();
+        $mImageMessageModel->image_local = $payload["image_local"];
+        $mImageMessageModel->save();
+        $added_id = $mImageMessageModel->id;
+
+        $response = [
+            'success' => true,
+            'message_id' => $added_id,
+        ];
+
+        return $response;
+    }
 
     public function updateImageMessage()
     {
