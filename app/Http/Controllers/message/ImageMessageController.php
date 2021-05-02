@@ -16,24 +16,21 @@ class ImageMessageController extends Controller
 
     public function linkStoragePath()
     {
-
+        
         File::link(
             storage_path('app/public'),
             public_path('storage')
         );
-
+        
         $response = [
             'success' => true
         ];
         return response()->json($response);
+
     }
     public function getImageMessage()
     {
         $messages = DB::table('message_image')->get();
-
-        for($i=0; $i< count($messages); $i++){
-            $messages[$i]->plusUrl = asset('storage/files/' . $messages[$i]->image_local);
-        }
 
         $response = [
             'success' => true,
@@ -76,6 +73,7 @@ class ImageMessageController extends Controller
             return $response;
         }
 
+        
         //4.儲存
         $path = request()->file('file-to-upload')->store('public/files');
         $fileName = basename($path);
@@ -83,8 +81,9 @@ class ImageMessageController extends Controller
         $domain_name = request()->root();
         $imageUrl = $domain_name . '/storage/files/' . $fileName;
 
-        //儲存檔名就好了
-        $imageUrl = $fileName;
+        //存成字串
+        $image = base64_encode(file_get_contents(request()->file('file-to-upload')));
+        $imageUrl = $image;
 
         //5.把路徑存到資料表中
         //新增至資料庫
@@ -159,7 +158,6 @@ class ImageMessageController extends Controller
 
         $domain_name = request()->root();
         $imageUrl = $domain_name . '/storage/files/' . $fileName;
-
 
 
         //4刪除原本的圖片
