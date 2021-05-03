@@ -92,11 +92,8 @@ class ImageMessageController extends Controller
         
             $data = base64_decode($data);
             
-            Storage::disk('local')->put("files/".$uuidFileName, $data);
-            //dd("stored");
+            Storage::disk('local')->put("public/files/".$uuidFileName, $data);
         }
-        
-
 
         $mImageMessageModel = new ImageMessageModel();
         $mImageMessageModel->image_local = $uuidFileName;
