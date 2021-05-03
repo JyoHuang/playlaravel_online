@@ -9,7 +9,7 @@ use DB;
 use Illuminate\Http\Request;
 use Log;
 use Storage;
-use Illuminate\Support\Facades\File;
+use Illuminate\Support\Str;
 
 class ImageMessageController extends Controller
 {
@@ -84,8 +84,22 @@ class ImageMessageController extends Controller
     public function addImageBase64Message()
     {
         $payload = request()->all();
+
+        $uuidFileName = (string) Str::uuid().".png";
+        $base64_image = "data:image/png;base64,".$payload["image_local"];
+        if (preg_match('/^data:image\/(\w+);base64,/', $base64_image)) {
+            $data = substr($base64_image, strpos($base64_image, ',') + 1);
+        
+            $data = base64_decode($data);
+            
+            Storage::disk('local')->put("files/".$uuidFileName, $data);
+            //dd("stored");
+        }
+        
+
+
         $mImageMessageModel = new ImageMessageModel();
-        $mImageMessageModel->image_local = $payload["image_local"];
+        $mImageMessageModel->image_local = $uuidFileName;
         $mImageMessageModel->save();
         $added_id = $mImageMessageModel->id;
 
