@@ -14,19 +14,6 @@ use Illuminate\Support\Facades\File;
 class ImageMessageController extends Controller
 {
 
-    public function linkStoragePath()
-    {
-
-        File::link(
-            storage_path('app/public'),
-            public_path('storage')
-        );
-
-        $response = [
-            'success' => true
-        ];
-        return response()->json($response);
-    }
     public function getImageMessage()
     {
         $messages = DB::table('message_image')->get();
@@ -73,25 +60,29 @@ class ImageMessageController extends Controller
         }
 
 
-        //4.把圖存成base64字串就好囉
-        $imageUrl = base64_encode(file_get_contents(request()->file('file-to-upload')));
+        //4.儲存
+        $path = request()->file('file-to-upload')->store('public/files');
+        $fileName = basename($path);
+
+        
 
         //5.把路徑存到資料表中
         //新增至資料庫
         $mImageMessageModel = new ImageMessageModel();
-        $mImageMessageModel->image_local = $imageUrl;
+        $mImageMessageModel->image_local = $fileName;
         $mImageMessageModel->save();
         $added_id = $mImageMessageModel->id;
 
         $response = [
             'success' => true,
-            'imageUrl' => $imageUrl,
+            'image_local' => $fileName,
             'message_id' => $added_id,
         ];
 
         return $response;
     }
-    public function addImageBase64Message(){
+    public function addImageBase64Message()
+    {
         $payload = request()->all();
         $mImageMessageModel = new ImageMessageModel();
         $mImageMessageModel->image_local = $payload["image_local"];
@@ -157,18 +148,34 @@ class ImageMessageController extends Controller
             return $response;
         }
 
-        //4.把圖存成base64字串就好囉
-        $imageUrl = base64_encode(file_get_contents(request()->file('file-to-upload')));
+        //4.儲存
+        $path = request()->file('file-to-upload')->store('public/files');
+        $fileName = basename($path);
+
+
+        //先刪除原本的圖片
+        $result = DB::table('message_image')
+            ->where('id', $payload['id'])
+            ->first();
+        if (empty($result)) {
+            $response = [
+                'success' => false,
+                'message' => '不存在',
+            ];
+            return $response;
+        }
+        $filePath = $result->image_local;
+        $deleteResult = Storage::delete("public/files/" . $filePath);
 
         //5.把路徑存到資料表中
         //更新至資料庫
         DB::table('message_image')
             ->where('id', $payload['id'])
-            ->update(['image_local' => $imageUrl]);
+            ->update(['image_local' => $fileName]);
 
         $response = [
             'success' => true,
-            'imageUrl' => $imageUrl,
+            'imageUrl' => $fileName,
         ];
 
         return $response;
@@ -205,10 +212,9 @@ class ImageMessageController extends Controller
         }
 
         //先刪除圖片
-        $image_local_to_delete = $result->image_local;
-        $indexOfFilePath = strpos($image_local_to_delete, 'files');
-        $filePath = substr($image_local_to_delete, $indexOfFilePath);
-        $deleteResult = Storage::delete("public/" . $filePath);
+        $filePath = $result->image_local;
+        $deleteResult = Storage::delete("public/files/" . $filePath);
+
 
         //再刪除資料庫的內容
         $result = DB::table('message_image')
@@ -217,7 +223,6 @@ class ImageMessageController extends Controller
 
         $response = [
             'success' => true,
-            'image_local_to_delete' => $image_local_to_delete,
             'filePath' => $filePath,
             'deleteResult' => $deleteResult
         ];
