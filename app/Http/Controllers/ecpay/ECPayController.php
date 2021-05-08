@@ -76,7 +76,7 @@ class ECPayController extends Controller
     {
         $input = request()->all();
         Log::info(json_encode($input)); 
-
+        return "1|OK";
     }
 
     public function redirectFromECpay () {
