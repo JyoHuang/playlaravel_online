@@ -20,7 +20,9 @@ class VerifyCsrfToken extends Middleware
      */
     protected $except = [
         //
+        /*
         'http://playlaravel.today/callback',
         'https://playlaravel.createdigit.com/callback'
+        */
     ];
 }
