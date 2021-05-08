@@ -23,7 +23,7 @@ class ECPayController extends Controller
 
     public function EnterPage()
     {
-
+        dd(url('/'));
         return view('ecpay.enterpage');
     }
 
