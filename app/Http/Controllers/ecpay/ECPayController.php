@@ -74,9 +74,13 @@ class ECPayController extends Controller
 
     public function callback()
     {
-        $input = request()->all();
-        Log::info(json_encode($input)); 
-        return "1|OK";
+        try{
+            $input = request()->all();
+            Log::info(json_encode($input)); 
+            return "1|OK";
+        }catch (Exception $e) {
+            return "1|OK";
+        }
     }
 
     public function redirectFromECpay () {
