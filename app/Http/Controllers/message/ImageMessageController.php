@@ -36,8 +36,8 @@ class ImageMessageController extends Controller
 
         $name = request()->file('file-to-upload')->getClientOriginalName();
         //2.選的是不是圖片
-        $beginIndex = strripos($name, ".");
-        $extension = substr($name, $beginIndex);
+        $beginIndex = strripos($name, ".");  //找到abc.png 第一個出現.的位置 =3
+        $extension = substr($name, $beginIndex); //取出abc.png 的子字串 從位置$beginIndex=3
         if ($extension != '.jpg' && $extension != '.png' && $extension != '.jpeg') {
             return response()->json(['success' => false, 'message' => '請選擇正確檔案']);
         }

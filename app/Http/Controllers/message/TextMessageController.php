@@ -30,7 +30,7 @@ class TextMessageController extends Controller
         $rules = [
             'message' => [
                 'required',
-                'max:5',
+                'max:15',
             ]
         ];
         //檢查看看
@@ -64,7 +64,7 @@ class TextMessageController extends Controller
         $rules = [
             'message' => [
                 'required',
-                'max:5',
+                'max:15',
             ],
             'id' => [
                 'required',
