@@ -13,7 +13,7 @@ use Illuminate\Support\Str;
 
 class ImageMessageController extends Controller
 {
-
+    //取得所有圖片的內容
     public function getImageMessage()
     {
         $messages = DB::table('message_image')->get();
@@ -24,7 +24,7 @@ class ImageMessageController extends Controller
         ];
         return response()->json($response);
     }
-
+    //增加一筆圖片內容
     public function addImageMessage()
     {
         $payload = request()->all();
@@ -81,33 +81,7 @@ class ImageMessageController extends Controller
 
         return $response;
     }
-    public function addImageBase64Message()
-    {
-        $payload = request()->all();
-
-        $uuidFileName = (string) Str::uuid().".png";
-        $base64_image = "data:image/png;base64,".$payload["image_local"];
-        if (preg_match('/^data:image\/(\w+);base64,/', $base64_image)) {
-            $data = substr($base64_image, strpos($base64_image, ',') + 1);
-        
-            $data = base64_decode($data);
-            
-            Storage::disk('local')->put("public/files/".$uuidFileName, $data);
-        }
-
-        $mImageMessageModel = new ImageMessageModel();
-        $mImageMessageModel->image_local = $uuidFileName;
-        $mImageMessageModel->save();
-        $added_id = $mImageMessageModel->id;
-
-        $response = [
-            'success' => true,
-            'message_id' => $added_id,
-        ];
-
-        return $response;
-    }
-
+    //更新一筆圖片的內容
     public function updateImageMessage()
     {
         //取得所有輸入
@@ -191,6 +165,7 @@ class ImageMessageController extends Controller
 
         return $response;
     }
+    //刪除一筆圖片的內容
     public function deleteImageMessage()
     {
         //取得所有輸入
@@ -239,6 +214,7 @@ class ImageMessageController extends Controller
         ];
         return $response;
     }
+    //搜尋一筆圖片的內容
     public function searchImageMessage()
     {
         //取得所有輸入

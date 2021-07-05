@@ -10,18 +10,18 @@ use Illuminate\Http\Request;
 
 class TextMessageController extends Controller
 {
-
+    //取得所有的文字訊息
     public function getTextMessage()
     {
         $messages = DB::table('message_text')->get();
-
+        //包裝成JSON格式回傳
         $response = [
             'success' => true,
             'messages' => $messages,
         ];
         return response()->json($response);
     }
-
+    //增加一筆文字訊息
     public function addTextMessage()
     {
         //取得所有輸入
@@ -33,7 +33,7 @@ class TextMessageController extends Controller
                 'max:15',
             ]
         ];
-        //檢查看看
+        //檢查看看輸入的東西有沒有問題
         $validator = Validator::make($input, $rules);
         if ($validator->fails()) {
             $response = [
@@ -55,7 +55,7 @@ class TextMessageController extends Controller
         ];
         return response()->json($response);
     }
-
+    //更新某一筆文字訊息
     public function updateTextMessage()
     {
         //取得所有輸入
@@ -90,7 +90,7 @@ class TextMessageController extends Controller
         ];
         return response()->json($response);
     }
-
+    //刪除某一筆文字的訊息
     public function deleteTextMessage()
     {
         //取得所有輸入
@@ -120,7 +120,7 @@ class TextMessageController extends Controller
         ];
         return response()->json($response);
     }
-
+    //搜尋某一筆文字的訊息
     public function searchtextmessage()
     {
         //取得所有輸入
