@@ -27,8 +27,6 @@ class EmailController extends Controller
         */
 
         $mail_binding = [
-            'name' => $name,
-            'email' => $email,
             'verifyCode' => $verifyCode,
         ];
         Mail::send('emailview.verifyCodeEmail', $mail_binding,
