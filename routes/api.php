@@ -32,3 +32,5 @@ Route::group(['prefix' => 'message'], function () {
 
     Route::post('/addimagebase64message','message\ImageMessageController@addImageBase64Message'); 
 });
+
+Route::post('/sendemail','email\EmailController@sendEmail'); 
