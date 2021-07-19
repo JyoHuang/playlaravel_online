@@ -34,3 +34,5 @@ Route::group(['prefix' => 'message'], function () {
 });
 
 Route::post('/sendemail','email\EmailController@sendEmail'); 
+
+Route::post('/getRestuarants','rest\RerstuarantController@getRestuarants'); 

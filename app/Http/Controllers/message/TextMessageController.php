@@ -10,6 +10,72 @@ use Illuminate\Http\Request;
 
 class TextMessageController extends Controller
 {
+    public function checkVerifyCode()
+    {
+        //取得所有輸入
+        $input = request()->all();
+
+        $verifyCode = $input["verifyCode"];
+        $email = $input["email"];
+
+        $user = DB::table('usertable')
+            ->where('email', $email)
+            ->where('verifyCode', $verifyCode)
+            ->first();
+        if (isset($user)) {
+            //這個使用者的驗證碼真的符合
+            $response = [
+                'success' => true
+            ];
+            return response()->json($response);
+        } else {
+            //驗證碼是輸入錯的
+            $response = [
+                'success' => false
+            ];
+            return response()->json($response);
+        }
+    }
+    public function forgotpassword()
+    {
+        //取得所有輸入
+        $input = request()->all();
+
+        $email = $input["email"];
+
+        $randomCode = rand(111111, 999999);
+
+        //更改密碼
+        DB::table('usertable')
+            ->where('email', $email)
+            ->update([
+                'password' => $randomCode
+            ]);
+
+        //寄送Email
+        $mail_binding = [
+            'password' => $randomCode,
+        ];
+        Mail::send(
+            'emailview.changepassword',
+            $mail_binding,
+            function ($mail) use ($input) {
+                //收件人
+                $mail->to($input('email'));
+                //寄件人
+                $mail->from('createdigit@gmail.com');
+                //郵件主旨
+                $mail->subject('恭喜修改密碼 找蔬舒 成功，請至APP填入新密碼');
+            }
+        );
+
+        //包裝成JSON格式回傳
+        $response = [
+            'success' => true
+        ];
+        return response()->json($response);
+    }
+
     //取得所有的文字訊息
     public function getTextMessage()
     {
@@ -151,4 +217,5 @@ class TextMessageController extends Controller
         ];
         return response()->json($response);
     }
+
 }
