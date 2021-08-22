@@ -95,6 +95,11 @@ class ECPayController extends Controller
     //接收訂單前往付款
     public function acceptorderTopay(){
         $input = request()->all();
+        $product_names = $input['product_names'];
+        $product_prices = $input['product_prices'];
+        $product_amounts = $input['product_amounts'];
+
+        //dd($input);
         $uuid_temp = str_replace("-", "",substr(Str::uuid()->toString(), 0,18));
         try {
             $obj = new \ECPay_AllInOne();
@@ -112,13 +117,19 @@ class ECPayController extends Controller
             $obj->Send['ClientBackURL'] = url('/')."/success" ;    //付款完成通知回傳的網址
             $obj->Send['MerchantTradeNo']   = $MerchantTradeNo;                          //訂單編號
             $obj->Send['MerchantTradeDate'] = date('Y/m/d H:i:s');                       //交易時間
-            $obj->Send['TotalAmount']       = $input["product_price"];                                      //交易金額
             $obj->Send['TradeDesc']         = "good to drink" ;                          //交易描述
             $obj->Send['ChoosePayment']     = ECPayMethod::Credit ;              //付款方式:Credit
             $obj->Send['IgnorePayment']     = ECPayMethod::GooglePay ;           //不使用付款方式:GooglePay
             //訂單的商品資料
-            array_push($obj->Send['Items'], array('Name' => $input["name"], 'Price' => $input["product_price"],
-            'Currency' => "元", 'Quantity' => (int) "1", 'URL' => "dedwed"));
+            //array_push($obj->Send['Items'], array('Name' => $input["name"], 'Price' => $input["product_price"],
+            //'Currency' => "元", 'Quantity' => (int) "1", 'URL' => "dedwed"));
+            $totalPrice = 0;
+            for($i = 0 ; $i < count($product_names); $i++){
+                array_push($obj->Send['Items'], array('Name' => $product_names[$i], 'Price' =>  $product_prices[$i],
+                'Currency' => "元", 'Quantity' => (int) $product_amounts[$i], 'URL' => "dedwed"));
+                $totalPrice = $totalPrice + $product_prices[$i]*$product_amounts[$i];
+            }
+            $obj->Send['TotalAmount'] = $totalPrice;         //交易總金額
             $obj->CheckOut();
         } catch (Exception $e) {
             echo $e->getMessage();
