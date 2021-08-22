@@ -91,7 +91,10 @@ class ECPayController extends Controller
         session()->flash('success', 'Order success!');
         return redirect('/ecpay_demo/billlistpage');
     }
-    //!!!!!!!! 用這個就好 !!!!!!!
+
+
+
+    //!!!!!!!! 用下面這些就好 !!!!!!!
     //接收訂單前往付款
     public function acceptorderTopay(){
         $input = request()->all();
@@ -112,9 +115,9 @@ class ECPayController extends Controller
             $obj->EncryptType = '1';                                                           //CheckMacValue加密類型，請固定填入1，使用SHA256加密
             //基本參數(請依系統規劃自行調整)
             $MerchantTradeNo = $uuid_temp ;
-            $obj->Send['ReturnURL']         = url('/')."/callback" ;    //付款完成通知回傳的網址
-            $obj->Send['PeriodReturnURL']         = url('/')."/callback" ;    //付款完成通知回傳的網址
-            $obj->Send['ClientBackURL'] = url('/')."/success" ;    //付款完成通知回傳的網址
+            $obj->Send['ReturnURL']         = url('/')."/acceptorderTopayCallback" ;    //付款完成通知回傳的網址
+            $obj->Send['PeriodReturnURL']         = url('/')."/acceptorderTopayCallback" ;    //付款完成通知回傳的網址
+            $obj->Send['ClientBackURL'] = url('/')."/acceptorderTopayOK" ;    //付款完成通知回傳的網址
             $obj->Send['MerchantTradeNo']   = $MerchantTradeNo;                          //訂單編號
             $obj->Send['MerchantTradeDate'] = date('Y/m/d H:i:s');                       //交易時間
             $obj->Send['TradeDesc']         = "good to drink" ;                          //交易描述
@@ -134,5 +137,20 @@ class ECPayController extends Controller
         } catch (Exception $e) {
             echo $e->getMessage();
         }
+    }
+    //成功綠界會把資料傳到這個地方
+    public function acceptorderTopayCallback(){
+        try{
+            $input = request()->all();
+            Log::info(json_encode($input)); 
+            //這邊可以做一些把訂單資料存到資料庫的動作
+            return "1|OK";
+        }catch (Exception $e) {
+            return "1|OK";
+        }
+    }
+    //成功會將頁面導到這邊
+    public function acceptorderTopayOK(){
+        return view('ecpay.enterpage');
     }
 }
