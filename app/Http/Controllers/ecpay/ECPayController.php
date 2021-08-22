@@ -151,6 +151,6 @@ class ECPayController extends Controller
     }
     //成功會將頁面導到這邊
     public function acceptorderTopayOK(){
-        return view('ecpay.enterpage');
+        return view('ecpay.okpage');
     }
 }
