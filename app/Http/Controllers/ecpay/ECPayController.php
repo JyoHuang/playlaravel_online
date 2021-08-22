@@ -7,6 +7,7 @@ use DB;
 use Illuminate\Http\Request;
 use GuzzleHttp\Client;
 use Log;
+use Exception;
 
 
 use \ECPay_PaymentMethod as ECPayMethod;
@@ -34,6 +35,9 @@ class ECPayController extends Controller
     public function Topay()
     {
         $input = request()->all();
+        dd($input);
+        //dump($input);
+        //return;
         $uuid_temp = str_replace("-", "",substr(Str::uuid()->toString(), 0,18));
 
         request()->validate([

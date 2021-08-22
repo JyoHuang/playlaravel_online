@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 
 class RerstuarantController extends Controller
 {
-    
+
     //取得所有餐廳
     public function getRestuarants(Request $request)
     {
