@@ -37,4 +37,4 @@ Route::get('/success', 'ecpay\ECPayController@redirectFromECpay');
 
 Route::get('/ecpay_demo/acceptorderTopay', 'ecpay\ECPayController@acceptorderTopay');
 Route::post('/acceptorderTopayCallback', 'ecpay\ECPayController@acceptorderTopayCallback');
-Route::get('/ecpay_demo/acceptorderTopayOK', 'ecpay\ECPayController@acceptorderTopayOK');
+Route::get('/acceptorderTopayOK', 'ecpay\ECPayController@acceptorderTopayOK');
