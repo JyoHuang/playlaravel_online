@@ -22,7 +22,9 @@ class VerifyCsrfToken extends Middleware
         //
         
         'http://playlaravel.today/callback',
-        'https://playlaravel.createdigit.com/callback'
+        'https://playlaravel.createdigit.com/callback',
+        '/callback',
+        '/acceptorderTopayCallback'
         
     ];
 }
